@@ -10,6 +10,7 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <title>Код и Магия</title>
   </head>
+
   <body>
     <header>
       <svg
@@ -240,7 +241,7 @@
         return 1.377 * wizardWidth;
       };
       var getWizardX = function(width) {
-        return (width - wizardWidth) * 0.5;
+        return width * 0.5 - wizardWidth * 0.5;
       };
       var getWizardY = function(height) {
         return height / 3 - getWizardHeight();
