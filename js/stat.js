@@ -17,6 +17,7 @@ var TIME_Y = CLOUD_Y + 60;
 var NAME_Y = CLOUD_Y + 240;
 var COLUMN_X = CLOUD_X + 40;
 var COLUMN_Y = CLOUD_Y + 80;
+var PERCENT_SATURATION = 100;
 
 var getMaxElement = function (arr) {
   var maxElement = arr[0];
@@ -49,12 +50,12 @@ var renderText = function (ctx, text, lineheight, x, y) {
 
 var renderColumn = function (ctx, name, time, maxTime, x) {
   var columnHeight = COLUMN_HEIGHT / maxTime * time;
-  var randomColor = Math.round(Math.random() * 205 + 50);
+  var randomColor = Math.round(Math.random() * PERCENT_SATURATION);
   ctx.fillStyle = '#000';
   ctx.fillText(Math.round(time), x, TIME_Y + (COLUMN_HEIGHT - columnHeight));
   ctx.fillText(name, x, NAME_Y);
 
-  ctx.fillStyle = name === 'Вы' ? 'rgb(255, 0, 0)' : 'rgb(0, 0, ' + randomColor + ')';
+  ctx.fillStyle = name === 'Вы' ? 'rgb(255, 0, 0)' : 'hsl(240, ' + randomColor + '%, 50%)';
   ctx.fillRect(x, COLUMN_Y + (COLUMN_HEIGHT - columnHeight), COLUMN_WIDTH, columnHeight);
 };
 
