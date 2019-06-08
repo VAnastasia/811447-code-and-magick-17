@@ -11,7 +11,7 @@ var WIZARD_AMOUNT = 4;
 
 var getRandomItem = function (array) {
   return array[Math.round(Math.random() * (array.length - 1))];
-}
+};
 
 var generateWizards = function (names, surnames, coats, eyes, amount) {
   var wizards = [];
@@ -25,7 +25,7 @@ var generateWizards = function (names, surnames, coats, eyes, amount) {
     i++;
   }
   return wizards;
-}
+};
 
 var createWizard = function (wizardObj) {
   var similarListElement = document.querySelector('.setup-similar-list');
@@ -37,7 +37,7 @@ var createWizard = function (wizardObj) {
   wizardElement.querySelector('.wizard-coat').style.fill = wizardObj.coatColor;
   wizardElement.querySelector('.wizard-eyes').style.fill = wizardObj.eyesColor;
   similarListElement.appendChild(wizardElement);
-}
+};
 
 var addWizards = function () {
   var wizards = generateWizards(WIZARD_NAMES, WIZARD_SURNAMES, WIZARD_COATS, WIZARD_EYES, WIZARD_AMOUNT);
