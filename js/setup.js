@@ -46,7 +46,7 @@ var openSimilarWizards = function () {
 
 var onUserNameEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
-    document.removeEventListener('keydown', onPopupEscPress);
+    evt.stopPropagation();
     userName.blur();
   }
 };
