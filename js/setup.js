@@ -10,7 +10,7 @@ var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 
 var setup = document.querySelector('.setup');
-var setupOpen = document.querySelector('.setup-open');
+var setupOpen = document.querySelector('.setup-open-icon');
 var setupClose = setup.querySelector('.setup-close');
 
 var setupPlayer = document.querySelector('.setup-player');
@@ -23,11 +23,6 @@ var inputFireball = fireball.querySelector('input[name="fireball-color"]');
 
 var form = document.querySelector('.setup-wizard-form');
 var userName = form.querySelector('.setup-user-name');
-
-setupOpen.tabIndex = 0;
-setupClose.tabIndex = 0;
-form.action = 'https://js.dump.academy/code-and-magick';
-userName.minLength = 2;
 
 var getRandomItem = function (array) {
   return array[Math.round(Math.random() * (array.length - 1))];
@@ -44,6 +39,10 @@ var getNextItem = function (value, array) {
 };
 
 // Открытие/закрытие окна настройки персонажа
+
+var openSimilarWizards = function () {
+  document.querySelector('.setup-similar').classList.remove('hidden');
+};
 
 var onUserNameEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
@@ -77,11 +76,13 @@ var closePopup = function () {
 
 setupOpen.addEventListener('click', function () {
   openPopup();
+  openSimilarWizards();
 });
 
 setupOpen.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openPopup();
+    openSimilarWizards();
   }
 });
 
