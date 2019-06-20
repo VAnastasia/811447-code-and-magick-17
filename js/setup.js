@@ -8,6 +8,8 @@ var WIZARD_FIREBALLS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 var WIZARD_AMOUNT = 4;
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
+var SETUP_START_Y = '80px';
+var SETUP_START_X = '50%';
 
 var setup = document.querySelector('.setup');
 var setupOpen = document.querySelector('.setup-open-icon');
@@ -24,6 +26,10 @@ var inputFireball = fireball.querySelector('input[name="fireball-color"]');
 var form = document.querySelector('.setup-wizard-form');
 var userName = form.querySelector('.setup-user-name');
 
+var dialogHandler = setup.querySelector('.upload');
+
+// вспомогательные функции
+
 var getRandomItem = function (array) {
   return array[Math.round(Math.random() * (array.length - 1))];
 };
@@ -37,6 +43,60 @@ var getNextItem = function (value, array) {
   }
   return currentIndex === (array.length - 1 || -1) ? array[0] : array[currentIndex + 1];
 };
+
+
+// перетаскивание диалогового окна
+
+var onDragDialog = function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var dragged = true;
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    setup.style.top = (setup.offsetTop - shift.y) + 'px';
+    setup.style.left = (setup.offsetLeft - shift.x) + 'px';
+
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    if (dragged) {
+      var onClickPreventDefault = function (dragEvt) {
+        dragEvt.preventDefault();
+        dialogHandler.removeEventListener('click', onClickPreventDefault);
+      };
+
+      dialogHandler.addEventListener('click', onClickPreventDefault);
+    }
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+};
+
+dialogHandler.addEventListener('mousedown', onDragDialog);
+
 
 // Открытие/закрытие окна настройки персонажа
 
@@ -66,11 +126,15 @@ var onPopupEscPress = function (evt) {
 
 var openPopup = function () {
   setup.classList.remove('hidden');
+  dialogHandler.addEventListener('mousedown', onDragDialog);
   document.addEventListener('keydown', onPopupEscPress);
 };
 
 var closePopup = function () {
   setup.classList.add('hidden');
+  dialogHandler.removeEventListener('mousedown', onDragDialog);
+  setup.style.top = SETUP_START_Y;
+  setup.style.left = SETUP_START_X;
   document.removeEventListener('keydown', onPopupEscPress);
 };
 
