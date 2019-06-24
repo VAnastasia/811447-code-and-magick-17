@@ -2,8 +2,6 @@
 
 (function () {
 
-  var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-  var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
   var WIZARD_COATS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
   var WIZARD_EYES = ['black', 'red', 'blue', 'yellow', 'green'];
   var WIZARD_FIREBALLS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
@@ -119,40 +117,53 @@
 
   // похожие персонажи
 
-  var generateWizards = function (names, surnames, coats, eyes, amount) {
-    var wizards = [];
-    for (var i = 0; i < amount; i++) {
-      var wizard = {};
-      wizard.name = window.util.getRandomItem(names) + ' ' + window.util.getRandomItem(surnames);
-      wizard.coatColor = window.util.getRandomItem(coats);
-      wizard.eyesColor = window.util.getRandomItem(eyes);
-      wizards.push(wizard);
-    }
-    return wizards;
-  };
-
   var createWizard = function (wizardObj) {
     var similarWizardTemplate = document.querySelector('#similar-wizard-template')
         .content
         .querySelector('.setup-similar-item');
     var wizardElement = similarWizardTemplate.cloneNode(true);
     wizardElement.querySelector('.setup-similar-label').textContent = wizardObj.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizardObj.coatColor;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizardObj.eyesColor;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizardObj.colorCoat;
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizardObj.colorEyes;
     return wizardElement;
   };
 
-  var addWizards = function () {
+  var addWizards = function (wizards) {
     var similarListElement = document.querySelector('.setup-similar-list');
     var fragment = document.createDocumentFragment();
-    var wizards = generateWizards(WIZARD_NAMES, WIZARD_SURNAMES, WIZARD_COATS, WIZARD_EYES, WIZARD_AMOUNT);
-    for (var i = 0; i < wizards.length; i++) {
+
+    wizards = window.util.shuffle(wizards);
+    for (var i = 0; i < WIZARD_AMOUNT; i++) {
       fragment.appendChild(createWizard(wizards[i]));
     }
     similarListElement.appendChild(fragment);
   };
 
-  addWizards();
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+
+  window.backend.load(addWizards, errorHandler);
+
+  // сохранение отправленных данных
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+
+    window.backend.save(new FormData(form), function () {
+      setup.classList.add('hidden');
+    }, errorHandler);
+
+  });
 
   // добавления инвентаря в рюкзак
 
